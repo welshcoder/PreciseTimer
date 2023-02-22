@@ -258,6 +258,12 @@ namespace CustomTimers.Model
             Reset ();
         }
 
+        public virtual void Restart()
+        {
+            Stop();
+            Start();
+        }
+
         public virtual void FindEffectivTime ()
         {
             while (true)

@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms;
 using CustomTimers.Common;
 using CustomTimers.Model;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace CustomTimers.View
 {
@@ -15,7 +14,7 @@ namespace CustomTimers.View
         //-----------------------------------------------
 
         private readonly CustomTimer _countdownTimer = new CountdownTimer();
-        private readonly WindowsSoundPlayer _player = new WindowsSoundPlayer();
+        private readonly WMPLib.WindowsMediaPlayer _player = new WMPLib.WindowsMediaPlayer();
         private bool _isStopClicked;
 
         //-----------------------------------------------
@@ -26,10 +25,27 @@ namespace CustomTimers.View
             get { return _countdownTimer.State; }
         }
 
-        public string Message
-        {
-            get { return txtMessage.Text; }
+        public int Interval { get; set; }
+        public string IntervalUnit { get; set; }
+        public bool HighResolutionTimer { get; set; }
+
+        public bool EndingSoundEnable { get; set; }
+        public string EndingSoundPath { get; set; } = string.Empty;
+        public bool CountdownSoundEnable { get; set; } = false;
+        public string CountdownSoundPath { get; set; } = string.Empty;
+        public int CountdownLastSeconds { get; set; }
+        public long SetTimeInMilliseconds { set
+            {
+                nudMillisecond.Value = value % 1000;
+                value /= 1000;
+                nudSecond.Value = value % 60;
+                value /= 60;
+                nudMinute.Value = value % 60;
+                value /= 60;
+                nudHour.Value = value;
+            }
         }
+        public bool AutoLoop { get; set; } = false;
 
         public IStatusReporter StatusReporter { get; set; }
 
@@ -70,20 +86,20 @@ namespace CustomTimers.View
                     string.Format("{0:00}", _countdownTimer.Second);
                 lblMillisecond.Text =
                     string.Format("{0:000}", _countdownTimer.Millisecond);
+
+                lblMillisecond.Update();
+                lblSecond.Update();
+                lblMinute.Update();
+                lblHour.Update();
             }
         }
 
         private void UpdateInputs ()
         {
-            cbxIntervalUnit.DataSource = Enum.GetValues(
-                typeof(CustomTimer.IntervalUnits));
-            txtInterval.Text = string.Format("{0}", _countdownTimer.Interval);
-            txtHour.Text = string.Format("{0:00}", _countdownTimer.Hour);
-            txtMinute.Text = string.Format("{0:00}", _countdownTimer.Minute);
-            txtSecond.Text = string.Format("{0:00}", _countdownTimer.Second);
-            txtMillisecond.Text = string.Format(
-                "{0:000}", _countdownTimer.Millisecond);
-            cbxHighResolution.Checked = _countdownTimer.UseHighResolution;
+            nudHour.Value = _countdownTimer.Hour;
+            nudMinute.Value = _countdownTimer.Minute;
+            nudSecond.Value = _countdownTimer.Second;
+            nudMillisecond.Value = _countdownTimer.Millisecond;
         }
 
         private void UpdateButtons ()
@@ -110,15 +126,15 @@ namespace CustomTimers.View
             }
         }
 
-        private void PlaySimpleSound ()
+        private void PlaySound (string path)
         {
-            if (txtSound.Text == null || !cbxSoundEnabled.Checked)
+            if (path ==string.Empty)
                 return;
 
             try
             {
-                _player.FileName = txtSound.Text;
-                _player.Play();
+                _player.URL = path;
+                _player.controls.play();
             }
             catch (Exception ex)
             {
@@ -138,7 +154,7 @@ namespace CustomTimers.View
 
         private void Cleanup ()
         {
-            _player.Stop();
+            _player.controls.stop();
         }
 
         //-----------------------------------------------
@@ -156,16 +172,11 @@ namespace CustomTimers.View
             var memento =
                 new List<KeyedElement>
                 {
-                    new KeyedElement("IntervalUnit", cbxIntervalUnit.SelectedValue.ToString()),
-                    new KeyedElement("Interval", txtInterval.Text),
-                    new KeyedElement("Hour", txtHour.Text),
-                    new KeyedElement("Minute", txtMinute.Text),
-                    new KeyedElement("Second", txtSecond.Text),
-                    new KeyedElement("Millisecond", txtMillisecond.Text),
-                    new KeyedElement("HighResolution", cbxHighResolution.Checked.ToString()),
-                    new KeyedElement("Message", txtMessage.Text),
-                    new KeyedElement("Sound", txtSound.Text),
-                    new KeyedElement("SoundEnabled", cbxSoundEnabled.Checked.ToString())
+                    new KeyedElement("Hour", nudHour.Value.ToString()),
+                    new KeyedElement("Minute", nudMinute.Value.ToString()),
+                    new KeyedElement("Second", nudSecond.Value.ToString()),
+                    new KeyedElement("Millisecond", nudMillisecond.Value.ToString()),
+                    new KeyedElement("AutoLoop", AutoLoop.ToString())
                 };
 
             return memento;
@@ -180,16 +191,11 @@ namespace CustomTimers.View
                 {
                     var memento = mementoList.ToDictionary(k => k.Key, v => v.Value);
 
-                    cbxIntervalUnit.SelectedItem = memento["IntervalUnit"];
-                    txtInterval.Text = memento["Interval"];
-                    txtHour.Text = memento["Hour"];
-                    txtMinute.Text = memento["Minute"];
-                    txtSecond.Text = memento["Second"];
-                    txtMillisecond.Text = memento["Millisecond"];
-                    cbxHighResolution.Checked = Convert.ToBoolean(memento["HighResolution"]);
-                    txtMessage.Text = memento["Message"];
-                    txtSound.Text = memento["Sound"];
-                    cbxSoundEnabled.Checked = Convert.ToBoolean(memento["SoundEnabled"]);
+                    nudHour.Value = Convert.ToUInt32(memento["Hour"]);
+                    nudMinute.Value = Convert.ToUInt32(memento["Minute"]);
+                    nudSecond.Value = Convert.ToUInt32(memento["Second"]);
+                    nudMillisecond.Value = Convert.ToUInt32(memento["Millisecond"]);
+                    AutoLoop = Convert.ToBoolean(memento["AutoLoop"]);
 
                     ReportStatus("Saved state has been restored successfully.");
                 }
@@ -216,21 +222,43 @@ namespace CustomTimers.View
         public event EventHandler TimerStarted;
         protected virtual void OnTimerStarted (EventArgs e)
         {
+            CountdownSoundLastSec = CountdownLastSeconds;
             TimerStarted(this, e);
         }
 
         //-----------------------------------------------
         // Event Handlers
         //-----------------------------------------------
+        private int CountdownSoundLastSec = 0;
         private void CustomTimerElapsed (object sender, EventArgs e)
         {
             UpdateLabels();
+
+            if (CountdownSoundEnable)
+            {
+                int sec = _countdownTimer.Second + _countdownTimer.Minute * 60 + _countdownTimer.Hour * 3600;
+                if (sec < CountdownSoundLastSec)
+                {
+                    PlaySound(CountdownSoundPath);
+                    CountdownSoundLastSec=sec;
+                }
+            }
+
         }
 
         private void CustomTimerCompleted (object sender, EventArgs e)
         {
-            PlaySimpleSound();
-            OnTimerCompleted(e);
+            if(EndingSoundEnable)
+                PlaySound(EndingSoundPath);
+            
+            if(!AutoLoop)
+                OnTimerCompleted(e);
+            else
+            {
+                _isStopClicked = false;
+                _countdownTimer.Restart();
+                OnTimerStarted(new EventArgs());
+            }
         }
 
         private void CountdownTimerStateChanged (object sender, EventArgs e)
@@ -245,17 +273,18 @@ namespace CustomTimers.View
             {
                 if (_countdownTimer.State != CustomTimer.TimerStates.Paused)
                 {
-                    _countdownTimer.Hour = Convert.ToInt32(txtHour.Text);
-                    _countdownTimer.Minute = Convert.ToInt32(txtMinute.Text);
-                    _countdownTimer.Second = Convert.ToInt32(txtSecond.Text);
+                    _countdownTimer.Hour = Convert.ToInt32(nudHour.Value);
+                    _countdownTimer.Minute = Convert.ToInt32(nudMinute.Value);
+                    _countdownTimer.Second = Convert.ToInt32(nudSecond.Value);
                     _countdownTimer.Millisecond =
-                        Convert.ToInt32(txtMillisecond.Text);
-                    _countdownTimer.Interval =
-                        Convert.ToInt32(txtInterval.Text);
+                        Convert.ToInt32(nudMillisecond.Value);
+                    _countdownTimer.Interval = Interval;
                     _countdownTimer.IntervalUnit =
                         (CustomTimer.IntervalUnits)Enum.Parse(
                         typeof(CustomTimer.IntervalUnits),
-                        cbxIntervalUnit.Text);
+                        IntervalUnit);
+
+                    _countdownTimer.UseHighResolution = HighResolutionTimer;
 
                     _countdownTimer.FindEffectivTime();
 
@@ -281,34 +310,15 @@ namespace CustomTimers.View
         private void BtnStopClick (object sender, EventArgs e)
         {
             _isStopClicked = true;
-            _player.Stop();
+            _player.controls.stop();
             _countdownTimer.Stop();
         }
 
         private void BtnResetClick (object sender, EventArgs e)
         {
             _isStopClicked = false;
-            _player.Stop();
+            _player.controls.stop();
             Reset();
-        }
-
-        private void CbxHighResolutionCheckedChanged (object sender, EventArgs e)
-        {
-            _countdownTimer.UseHighResolution = cbxHighResolution.Checked;
-        }
-
-        private void BtnBrowseSoundClick (object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtSound.Text))
-            {
-                dlgSound.InitialDirectory = Path.GetDirectoryName(txtSound.Text);
-            }
-
-            var dialogResult = dlgSound.ShowDialog();
-            if (dialogResult == DialogResult.OK)
-            {
-                txtSound.Text = dlgSound.FileName;
-            }
         }
 
         protected override void OnCreateControl ()
@@ -323,13 +333,13 @@ namespace CustomTimers.View
 
         private void ParentFormFormClosing (object sender, FormClosingEventArgs e)
         {
+            _countdownTimer.Stop();
             Cleanup();
         }
 
-        private void cbxSoundEnabled_CheckedChanged (object sender, EventArgs e)
+        private void cbxAutoLoop_CheckedChanged(object sender, EventArgs e)
         {
-            txtSound.Enabled = cbxSoundEnabled.Checked;
+            AutoLoop= cbxAutoLoop.Checked;
         }
-
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using CustomTimers.Common;
@@ -7,7 +8,7 @@ using CustomTimers.Model;
 
 namespace CustomTimers.View
 {
-    public partial class StopWatchUserControl : UserControl, IMementoContainer
+    public partial class StopWatchUserControl : UserControl
     {
         //-----------------------------------------------
         // Private data members
@@ -20,6 +21,10 @@ namespace CustomTimers.View
         //-----------------------------------------------
 
         public IStatusReporter StatusReporter { get; set; }
+
+        public int Interval {  get; set; }
+        public bool HighResolutionTimer { get; set; }
+        public string IntervalUnit { get; set; }
 
         //-----------------------------------------------
         // Private member functions
@@ -52,7 +57,7 @@ namespace CustomTimers.View
             _StopWatch.Reset ();
             UpdateStatus();
             UpdateLabels ();
-            UpdateInputs ();
+            //UpdateInputs ();
             UpdateButtons ();
         }
 
@@ -71,13 +76,7 @@ namespace CustomTimers.View
             }
         }
 
-        private void UpdateInputs ()
-        {
-            cbxIntervalUnit.DataSource = System.Enum.GetValues (
-                typeof (CustomTimer.IntervalUnits));
-            txtInterval.Text = string.Format ("{0}", _StopWatch.Interval);
-            cbxHighResolution.Checked = _StopWatch.UseHighResolution;
-        }
+
 
         private void UpdateButtons ()
         {
@@ -117,50 +116,12 @@ namespace CustomTimers.View
             Reset ();
         }
 
-        public object CreateMemento ()
-        {
-            var memento =
-                new List<KeyedElement>
-                {
-                    new KeyedElement("IntervalUnit", cbxIntervalUnit.SelectedValue.ToString()),
-                    new KeyedElement("Interval", txtInterval.Text),
-                    new KeyedElement("HighResolution", cbxHighResolution.Checked.ToString()),
-                    new KeyedElement("Message", txtMessage.Text)
-                };
 
-            return memento.ToList();
-        }
-
-        public void SetMemento (object mementoObject)
-        {
-            try
-            {
-                var mementoList = mementoObject as List<KeyedElement>;
-                if (mementoList != null)
-                {
-                    var memento = mementoList.ToDictionary(k => k.Key, v => v.Value);
-
-                    cbxIntervalUnit.SelectedItem = memento["IntervalUnit"];
-                    txtInterval.Text = memento["Interval"];
-                    cbxHighResolution.Checked = Convert.ToBoolean(memento["HighResolution"]);
-                    txtMessage.Text = memento["Message"];
-
-                    ReportStatus("Saved state has been restored successfully.");
-                }
-                else
-                {
-                    ReportStatus("Cannot load saved state.");
-                }
-            }
-            catch (Exception ex)
-            {
-                ReportStatus(ex.Message);
-            }
-        }
 
         //-----------------------------------------------
         // Generated Events
         //-----------------------------------------------
+        public event EventHandler<StopwatchToCountdownEventArgs> SetCountdownTimer;
 
         //-----------------------------------------------
         // Event Handlers
@@ -182,12 +143,11 @@ namespace CustomTimers.View
             {
                 if (_StopWatch.State != CustomTimer.TimerStates.Paused)
                 {
-                    _StopWatch.Interval =
-                            Convert.ToInt32 (txtInterval.Text);
+                    _StopWatch.Interval = Interval;
                     _StopWatch.IntervalUnit =
                         (CustomTimer.IntervalUnits) Enum.Parse (
                         typeof (CustomTimer.IntervalUnits),
-                        cbxIntervalUnit.Text);
+                        IntervalUnit);
 
                     UpdateStatus();
                     UpdateLabels ();
@@ -221,8 +181,41 @@ namespace CustomTimers.View
 
         private void cbxHighResolution_CheckedChanged (object sender, EventArgs e)
         {
-            _StopWatch.UseHighResolution = cbxHighResolution.Checked;
+            _StopWatch.UseHighResolution = HighResolutionTimer;
         }
-        
+
+        private void btnSendToCountdown_Click(object sender, EventArgs e)
+        {
+            StopwatchToCountdownEventArgs ea = new StopwatchToCountdownEventArgs();
+            if (_StopWatch.State == CustomTimer.TimerStates.Running)
+            {
+                ea.CountdownTime = _StopWatch.Millisecond;
+                ea.CountdownTime += _StopWatch.Second * 1000;
+                ea.CountdownTime += _StopWatch.Minute * 60 * 1000;
+                ea.CountdownTime += _StopWatch.Hour * 60 * 60 * 1000;
+                ea.CountdownTime /= (long)nudDivisor.Value;
+            }
+            else
+            {
+                ea.CountdownTime = Convert.ToInt64(lblMillisecond.Text);
+                ea.CountdownTime += Convert.ToInt64(lblSecond.Text)*1000;
+                ea.CountdownTime += Convert.ToInt64(lblMinute.Text)*60*1000;
+                ea.CountdownTime += Convert.ToInt64(lblHour.Text)*60*60*1000;
+            }
+
+            ea.CountdownTime /= (long)nudDivisor.Value;
+            Debug.Print(ea.CountdownTime.ToString());
+
+            RaiseSendToCountdown(ea);
+        }
+
+        protected virtual void RaiseSendToCountdown(StopwatchToCountdownEventArgs e)
+        {
+            EventHandler<StopwatchToCountdownEventArgs> handler = SetCountdownTimer;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
     }
 }

@@ -32,3 +32,18 @@ Summary:
         * State is saved to State.xml next to the executable.
 
 
+--- Version 200 (XXXXXXX) by welshcoder ---
+
+Summary:
+
+1. Moved most static settings to a dedicated Settings tab.
+2. Added the ability to have a countdown sound for the last few seconds.
+3. Added the ability to transfer the stopwatch time to the countdown timer,
+   including the ability to apply a divisor to the time. This is useful to 
+   use the stopwatch to get the time for, say, 10 events, and then use this
+   feature to provide a countdown to the next event.
+4. Added the ability to make the countdown timer auto restart when it
+   reaches zero. Check the AutoLoop option to enable this.
+5. Cleaned up the UI.
+6. Changed the sound play to a WMP-based one to allow files other than
+   .wav to be used.

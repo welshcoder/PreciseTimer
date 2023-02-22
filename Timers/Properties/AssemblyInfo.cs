@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle ("Timers")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyTitle("Precise Timer")]
+[assembly: AssemblyDescription("A Windows timer with millisecond setting option.")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("AUST")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct ("Timers")]
-[assembly: AssemblyCopyright ("Copyright © Engineforce 2010")]
+[assembly: AssemblyCopyright("Copyright © Engineforce 2010 / Welshcoder 2022")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion ("1.0.4.0")]
-[assembly: AssemblyFileVersion ("1.0.4.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

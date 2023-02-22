@@ -105,6 +105,16 @@ namespace CustomTimers.Model
             }
         }
 
+        public override void Restart()
+        {
+            _Hour=_hourLatch;
+            _Minute=_minuteLatch;
+            _Second = _secondLatch;
+            _Millisecond = _millisecondLatch;
+
+            Start();
+        }
+
         //-----------------------------------------------
         // Generated Events
         //-----------------------------------------------

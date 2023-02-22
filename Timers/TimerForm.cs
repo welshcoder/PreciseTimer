@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using CustomTimers.Common;
@@ -33,7 +30,14 @@ namespace CustomTimers
             ucCountdown.TimerCompleted += new EventHandler(UcCountdownTimerCompleted);
             ucCountdown.TimerStarted += new EventHandler(UcCountdownTimerStarted);
             ucCountdown.StatusReporter = this;
+
             ucStopWatch.StatusReporter = this;
+            ucStopWatch.SetCountdownTimer += new EventHandler<StopwatchToCountdownEventArgs>(OnSendToCountdown);
+
+            ucSettings.StatusReporter = this;
+            ucSettings.SettingsUpdated += new EventHandler(OnSettingsUpdated);
+
+            OnSettingsUpdated(this,EventArgs.Empty);
         }
 
         private void SaveState ()
@@ -43,8 +47,9 @@ namespace CustomTimers
                 var state = new TimeFormState();
 
                 state.CountDownTimerState = ucCountdown.CreateMemento();
-                state.StopWatchTimerState = ucStopWatch.CreateMemento();
-                state.TopMost = cbxIsTopMost.Checked;
+                //state.StopWatchTimerState = ucStopWatch.CreateMemento();
+                state.SettingsState =  ucSettings.CreateMemento();
+                state.TopMost = ucSettings.AlwaysOnTop;
                 state.SelectedTabIndex = tabTimer.SelectedIndex;
 
                 using (var streamWriter = new StreamWriter(STATE_FILE_PATH))
@@ -76,8 +81,8 @@ namespace CustomTimers
                 if (state != null)
                 {
                     ucCountdown.SetMemento(state.CountDownTimerState);
-                    ucStopWatch.SetMemento(state.StopWatchTimerState);
-                    cbxIsTopMost.Checked = (bool)state.TopMost;
+                    //ucStopWatch.SetMemento(state.StopWatchTimerState);
+                    ucSettings.SetMemento(state.SettingsState);
                     tabTimer.SelectedIndex = state.SelectedTabIndex;
                 }
             }
@@ -98,15 +103,14 @@ namespace CustomTimers
         {
             if (FormWindowState.Minimized == WindowState)
             {
-                this.Hide();
-                nicoMain.Text = string.Format(
-                    "{0}: {1}", ucCountdown.TimerState, ucCountdown.Message);
+                Hide();
+                nicoMain.Text = string.Format("{0}", ucCountdown.TimerState);
             }
         }
 
         private void NicoMainDoubleClick (object sender, EventArgs e)
         {
-            this.Show();
+            Show();
             WindowState = FormWindowState.Normal;
         }
 
@@ -115,7 +119,7 @@ namespace CustomTimers
             // Show Message
             _messageBoxForm.Message = string.Format(
                 "\n" +
-                "Author: Paul Li\n" +
+                "Original Author: Paul Li\n" +
                 "Date Updated: 1st May 2012 \n" +
                 "Email: pong_ho80@hotmail.com \n");
             _messageBoxForm.ShowDialog(this);
@@ -123,29 +127,25 @@ namespace CustomTimers
 
         private void UcCountdownTimerCompleted (object sender, EventArgs e)
         {
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
-            this.TopMost = true;
+            Show();
+            WindowState = FormWindowState.Normal;
+            TopMost = true;
 
             // Update Tray Icon message
-            nicoMain.Text = string.Format(
-                "{0}: {1}", ucCountdown.TimerState, ucCountdown.Message);
+            nicoMain.Text = string.Format("{0}", ucCountdown.TimerState);
 
             // Show Message
-            _messageBoxForm.Message = string.Format("{0}", ucCountdown.Message);
-            _messageBoxForm.ShowDialog(this);
-            this.TopMost = false;
+            if (ucSettings.CountdownMessageEnable)
+            {
+                _messageBoxForm.Message = string.Format("{0}", ucSettings.CountdownMessage);
+                _messageBoxForm.ShowDialog(this);
+            }
+            TopMost = false;
         }
 
         private void UcCountdownTimerStarted (object sender, EventArgs e)
         {
-            nicoMain.Text = string.Format(
-                "{0}: {1}", ucCountdown.TimerState, ucCountdown.Message);
-        }
-
-        private void CbxIsTopMostCheckedChanged (object sender, EventArgs e)
-        {
-            this.TopMost = cbxIsTopMost.Checked;
+            nicoMain.Text = string.Format("{0}", ucCountdown.TimerState);
         }
 
         private void TimerFormFormClosed (object sender, FormClosedEventArgs e)
@@ -156,11 +156,12 @@ namespace CustomTimers
         private void TimerFormLoad (object sender, EventArgs e)
         {
             // tabTimer.SelectedIndex = 1;
-            this.TopMost = cbxIsTopMost.Checked;
+            TopMost = ucSettings.AlwaysOnTop;
 
             if (Settings.Default.LoadSettingsAtStart)
             {
                 LoadState(false);
+                OnSettingsUpdated(this, EventArgs.Empty);
             }
         }
 
@@ -200,6 +201,30 @@ namespace CustomTimers
         {
             lblStatus.Text = status;
         }
+
+        private void OnSettingsUpdated(object sender, EventArgs e)
+        {
+            ucStopWatch.Interval = ucSettings.Interval;
+            ucStopWatch.IntervalUnit= ucSettings.IntervalUnit;
+            ucStopWatch.HighResolutionTimer= ucSettings.HighResolutionTimer;
+
+            ucCountdown.Interval = ucSettings.Interval;
+            ucCountdown.IntervalUnit = ucSettings.IntervalUnit;
+            ucCountdown.HighResolutionTimer = ucSettings.HighResolutionTimer;
+            ucCountdown.CountdownSoundPath = ucSettings.CountdownSound;
+            ucCountdown.CountdownSoundEnable = ucSettings.CountdownSoundEnabled;
+            ucCountdown.CountdownLastSeconds = ucSettings.CountdownLastSeconds;
+            ucCountdown.EndingSoundEnable = ucSettings.CountdownEndingSoundEnabled;
+            ucCountdown.EndingSoundPath = ucSettings.CountdownEndingSound;
+
+            TopMost = ucSettings.AlwaysOnTop;
+        }
+
+        private void OnSendToCountdown(object sender, StopwatchToCountdownEventArgs e)
+        {
+            ucCountdown.SetTimeInMilliseconds=e.CountdownTime;
+        }
+
     }
 
     [XmlInclude(typeof(List<KeyedElement>))]
@@ -208,6 +233,7 @@ namespace CustomTimers
         public object CountDownTimerState { get; set; }
         public object StopWatchTimerState { get; set; }
 
+        public object SettingsState { get; set; }
         public bool TopMost { get; set; }
         public int SelectedTabIndex { get; set; }
     }
