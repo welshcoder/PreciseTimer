@@ -39,13 +39,13 @@ namespace CustomTimers.Model
                     * intervalInMs;
 
                 _Millisecond = _millisecondLatch - (int) (totalTime % 1000);
-                totalTime = totalTime / 1000;
+                totalTime /= 1000;
 
                 _Second = _secondLatch - (int) (totalTime % 60);
-                totalTime = totalTime / 60;
+                totalTime /= 60;
 
                 _Minute = _minuteLatch - (int) (totalTime % 60);
-                totalTime = totalTime / 60;
+                totalTime /= 60;
 
                 _Hour = _hourLatch - (int) (totalTime % 60);
 

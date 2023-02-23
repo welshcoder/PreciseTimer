@@ -241,8 +241,7 @@ namespace CustomTimers.Model
 
         public virtual void Pause ()
         {
-            if (_Timer != null)
-                _Timer.Stop ();
+            _Timer?.Stop ();
 
             _DiagnosticsStopWatch.Stop ();
             State = TimerStates.Paused;
@@ -250,8 +249,7 @@ namespace CustomTimers.Model
 
         public virtual void Stop ()
         {
-            if (_Timer != null)
-                _Timer.Stop ();
+            _Timer?.Stop();
 
             _DiagnosticsStopWatch.Stop ();
             State = TimerStates.Stopped;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -44,13 +43,13 @@ namespace CustomTimers
         {
             try
             {
-                var state = new TimeFormState();
-
-                state.CountDownTimerState = ucCountdown.CreateMemento();
-                //state.StopWatchTimerState = ucStopWatch.CreateMemento();
-                state.SettingsState =  ucSettings.CreateMemento();
-                state.TopMost = ucSettings.AlwaysOnTop;
-                state.SelectedTabIndex = tabTimer.SelectedIndex;
+                var state = new TimeFormState
+                {
+                    CountDownTimerState = ucCountdown.CreateMemento(),
+                    SettingsState = ucSettings.CreateMemento(),
+                    TopMost = ucSettings.AlwaysOnTop,
+                    SelectedTabIndex = tabTimer.SelectedIndex
+                };
 
                 using (var streamWriter = new StreamWriter(STATE_FILE_PATH))
                 {
@@ -81,7 +80,6 @@ namespace CustomTimers
                 if (state != null)
                 {
                     ucCountdown.SetMemento(state.CountDownTimerState);
-                    //ucStopWatch.SetMemento(state.StopWatchTimerState);
                     ucSettings.SetMemento(state.SettingsState);
                     tabTimer.SelectedIndex = state.SelectedTabIndex;
                 }

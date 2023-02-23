@@ -75,7 +75,6 @@ namespace CustomTimers.View
             // cbxIsTopMost
             // 
             this.cbxIsTopMost.AutoSize = true;
-            this.cbxIsTopMost.BackColor = System.Drawing.SystemColors.Control;
             this.cbxIsTopMost.Checked = true;
             this.cbxIsTopMost.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbxIsTopMost.Location = new System.Drawing.Point(20, 54);

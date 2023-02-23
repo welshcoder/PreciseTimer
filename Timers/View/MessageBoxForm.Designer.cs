@@ -42,7 +42,7 @@ namespace CustomTimers.View
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(300, 89);
             this.lblMessage.TabIndex = 0;
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
             // 

@@ -13,7 +13,7 @@ namespace CustomTimers.View
         //-----------------------------------------------
         // Private data members
         //-----------------------------------------------
-        private StopWatchTimer _StopWatch = new StopWatchTimer ();
+        private readonly StopWatchTimer _StopWatch = new StopWatchTimer ();
         private bool _IsStopClicked = false;
 
         //-----------------------------------------------
@@ -33,10 +33,10 @@ namespace CustomTimers.View
         {
             _StopWatch.SynchronizingObject = this;
             _StopWatch.Elapsed += new
-                EventHandler (_StopWatch_Elapsed);
+                EventHandler (StopWatch_Elapsed);
 
             _StopWatch.StateChanged += new
-                EventHandler (_StopWatch_StateChanged);
+                EventHandler (StopWatch_StateChanged);
         }
 
         private void UpdateStatus ()
@@ -46,10 +46,7 @@ namespace CustomTimers.View
 
         private void ReportStatus (string status)
         {
-            if (StatusReporter != null)
-            {
-                StatusReporter.ReportStatus(status);
-            }
+            StatusReporter?.ReportStatus(status);
         }
 
         private void Reset ()
@@ -65,14 +62,7 @@ namespace CustomTimers.View
         {
             if (!_IsStopClicked)
             {
-                lblHour.Text =
-                    string.Format ("{0:00}", _StopWatch.Hour);
-                lblMinute.Text =
-                    string.Format ("{0:00}", _StopWatch.Minute);
-                lblSecond.Text =
-                    string.Format ("{0:00}", _StopWatch.Second);
-                lblMillisecond.Text =
-                    string.Format ("{0:000}", _StopWatch.Millisecond);
+                ucTimeDisplay.SetAndUpdate((uint)_StopWatch.Hour, (uint)_StopWatch.Minute, (uint)_StopWatch.Second, (uint)_StopWatch.Millisecond);
             }
         }
 
@@ -126,13 +116,13 @@ namespace CustomTimers.View
         //-----------------------------------------------
         // Event Handlers
         //-----------------------------------------------       
-        private void _StopWatch_Elapsed (
+        private void StopWatch_Elapsed (
             object sender, EventArgs e)
         {
             UpdateLabels ();
         }
 
-        private void _StopWatch_StateChanged (object sender, EventArgs e)
+        private void StopWatch_StateChanged (object sender, EventArgs e)
         {
             UpdateButtons ();
         }
@@ -197,10 +187,7 @@ namespace CustomTimers.View
             }
             else
             {
-                ea.CountdownTime = Convert.ToInt64(lblMillisecond.Text);
-                ea.CountdownTime += Convert.ToInt64(lblSecond.Text)*1000;
-                ea.CountdownTime += Convert.ToInt64(lblMinute.Text)*60*1000;
-                ea.CountdownTime += Convert.ToInt64(lblHour.Text)*60*60*1000;
+                ea.CountdownTime = ucTimeDisplay.GetTotalMilliseconds();
             }
 
             ea.CountdownTime /= (long)nudDivisor.Value;
@@ -211,11 +198,7 @@ namespace CustomTimers.View
 
         protected virtual void RaiseSendToCountdown(StopwatchToCountdownEventArgs e)
         {
-            EventHandler<StopwatchToCountdownEventArgs> handler = SetCountdownTimer;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            SetCountdownTimer?.Invoke(this, e);
         }
     }
 }

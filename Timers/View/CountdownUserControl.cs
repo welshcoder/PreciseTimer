@@ -34,7 +34,8 @@ namespace CustomTimers.View
         public bool CountdownSoundEnable { get; set; } = false;
         public string CountdownSoundPath { get; set; } = string.Empty;
         public int CountdownLastSeconds { get; set; }
-        public long SetTimeInMilliseconds { set
+        public long SetTimeInMilliseconds {
+            set
             {
                 nudMillisecond.Value = value % 1000;
                 value /= 1000;
@@ -68,29 +69,14 @@ namespace CustomTimers.View
 
         private void ReportStatus (string status)
         {
-            if (StatusReporter != null)
-            {
-                StatusReporter.ReportStatus(status);
-            }
+            StatusReporter?.ReportStatus(status);
         }
 
         private void UpdateLabels ()
         {
             if (!_isStopClicked)
             {
-                lblHour.Text =
-                    string.Format("{0:00}", _countdownTimer.Hour);
-                lblMinute.Text =
-                    string.Format("{0:00}", _countdownTimer.Minute);
-                lblSecond.Text =
-                    string.Format("{0:00}", _countdownTimer.Second);
-                lblMillisecond.Text =
-                    string.Format("{0:000}", _countdownTimer.Millisecond);
-
-                lblMillisecond.Update();
-                lblSecond.Update();
-                lblMinute.Update();
-                lblHour.Update();
+                ucTimeDisplay.SetAndUpdate((uint)_countdownTimer.Hour, (uint)_countdownTimer.Minute, (uint)_countdownTimer.Second, (uint)_countdownTimer.Millisecond);
             }
         }
 
@@ -186,8 +172,7 @@ namespace CustomTimers.View
         {
             try
             {
-                var mementoList = mementoObject as List<KeyedElement>;
-                if (mementoList != null)
+                if (mementoObject is List<KeyedElement> mementoList)
                 {
                     var memento = mementoList.ToDictionary(k => k.Key, v => v.Value);
 

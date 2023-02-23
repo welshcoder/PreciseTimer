@@ -122,10 +122,7 @@ namespace CustomTimers.View
 
         private void ReportStatus(string status)
         {
-            if (StatusReporter != null)
-            {
-                StatusReporter.ReportStatus(status);
-            }
+            StatusReporter?.ReportStatus(status);
         }
 
 
@@ -149,8 +146,7 @@ namespace CustomTimers.View
         {
             try
             {
-                var mementoList = mementoObject as List<KeyedElement>;
-                if (mementoList != null)
+                if (mementoObject is List<KeyedElement> mementoList)
                 {
                     var memento = mementoList.ToDictionary(k => k.Key, v => v.Value);
 

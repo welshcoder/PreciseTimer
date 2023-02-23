@@ -43,26 +43,18 @@ namespace CustomTimers.View
             this.nudSecond = new System.Windows.Forms.NumericUpDown();
             this.nudMillisecond = new System.Windows.Forms.NumericUpDown();
             this.cbxAutoLoop = new System.Windows.Forms.CheckBox();
-            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-            this.lblHour = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.lblMinute = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.lblSecond = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.lblMillisecond = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
+            this.ucTimeDisplay = new CustomTimers.View.TimeDisplayUserControl();
             this.tableLayoutPanel16.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinute)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSecond)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMillisecond)).BeginInit();
-            this.flowLayoutPanel3.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,8 +63,8 @@ namespace CustomTimers.View
             this.tableLayoutPanel16.ColumnCount = 1;
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel16.Controls.Add(this.tableLayoutPanel12, 0, 0);
-            this.tableLayoutPanel16.Controls.Add(this.flowLayoutPanel3, 0, 1);
             this.tableLayoutPanel16.Controls.Add(this.panel3, 0, 2);
+            this.tableLayoutPanel16.Controls.Add(this.ucTimeDisplay, 0, 1);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel16.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
@@ -282,108 +274,6 @@ namespace CustomTimers.View
             this.cbxAutoLoop.UseVisualStyleBackColor = true;
             this.cbxAutoLoop.CheckedChanged += new System.EventHandler(this.cbxAutoLoop_CheckedChanged);
             // 
-            // flowLayoutPanel3
-            // 
-            this.flowLayoutPanel3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.flowLayoutPanel3.AutoSize = true;
-            this.flowLayoutPanel3.Controls.Add(this.lblHour);
-            this.flowLayoutPanel3.Controls.Add(this.label36);
-            this.flowLayoutPanel3.Controls.Add(this.lblMinute);
-            this.flowLayoutPanel3.Controls.Add(this.label38);
-            this.flowLayoutPanel3.Controls.Add(this.lblSecond);
-            this.flowLayoutPanel3.Controls.Add(this.label40);
-            this.flowLayoutPanel3.Controls.Add(this.lblMillisecond);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(114, 67);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(368, 45);
-            this.flowLayoutPanel3.TabIndex = 5;
-            // 
-            // lblHour
-            // 
-            this.lblHour.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblHour.AutoSize = true;
-            this.lblHour.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHour.Location = new System.Drawing.Point(0, 0);
-            this.lblHour.Margin = new System.Windows.Forms.Padding(0);
-            this.lblHour.Name = "lblHour";
-            this.lblHour.Size = new System.Drawing.Size(60, 45);
-            this.lblHour.TabIndex = 1;
-            this.lblHour.Text = "00";
-            this.lblHour.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label36
-            // 
-            this.label36.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label36.Location = new System.Drawing.Point(63, 4);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(26, 37);
-            this.label36.TabIndex = 1;
-            this.label36.Text = ":";
-            this.label36.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // lblMinute
-            // 
-            this.lblMinute.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblMinute.AutoSize = true;
-            this.lblMinute.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMinute.Location = new System.Drawing.Point(95, 0);
-            this.lblMinute.Name = "lblMinute";
-            this.lblMinute.Size = new System.Drawing.Size(60, 45);
-            this.lblMinute.TabIndex = 0;
-            this.lblMinute.Text = "00";
-            this.lblMinute.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label38
-            // 
-            this.label38.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label38.AutoSize = true;
-            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label38.Location = new System.Drawing.Point(161, 4);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(26, 37);
-            this.label38.TabIndex = 1;
-            this.label38.Text = ":";
-            this.label38.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // lblSecond
-            // 
-            this.lblSecond.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblSecond.AutoSize = true;
-            this.lblSecond.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSecond.Location = new System.Drawing.Point(193, 0);
-            this.lblSecond.Name = "lblSecond";
-            this.lblSecond.Size = new System.Drawing.Size(60, 45);
-            this.lblSecond.TabIndex = 0;
-            this.lblSecond.Text = "00";
-            this.lblSecond.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label40
-            // 
-            this.label40.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label40.AutoSize = true;
-            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label40.Location = new System.Drawing.Point(256, 4);
-            this.label40.Margin = new System.Windows.Forms.Padding(0);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(26, 37);
-            this.label40.TabIndex = 1;
-            this.label40.Text = ".";
-            this.label40.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // lblMillisecond
-            // 
-            this.lblMillisecond.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblMillisecond.AutoSize = true;
-            this.lblMillisecond.Font = new System.Drawing.Font("Tahoma", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMillisecond.Location = new System.Drawing.Point(285, 0);
-            this.lblMillisecond.Name = "lblMillisecond";
-            this.lblMillisecond.Size = new System.Drawing.Size(80, 45);
-            this.lblMillisecond.TabIndex = 0;
-            this.lblMillisecond.Text = "000";
-            this.lblMillisecond.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // panel3
             // 
             this.panel3.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -436,6 +326,18 @@ namespace CustomTimers.View
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.BtnStopClick);
             // 
+            // ucTimeDisplay
+            // 
+            this.ucTimeDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucTimeDisplay.Hours = ((uint)(0u));
+            this.ucTimeDisplay.Location = new System.Drawing.Point(3, 63);
+            this.ucTimeDisplay.Milliseconds = ((uint)(0u));
+            this.ucTimeDisplay.Minutes = ((uint)(0u));
+            this.ucTimeDisplay.Name = "ucTimeDisplay";
+            this.ucTimeDisplay.Seconds = ((uint)(0u));
+            this.ucTimeDisplay.Size = new System.Drawing.Size(590, 54);
+            this.ucTimeDisplay.TabIndex = 7;
+            // 
             // CountdownUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -445,15 +347,12 @@ namespace CustomTimers.View
             this.Name = "CountdownUserControl";
             this.Size = new System.Drawing.Size(596, 448);
             this.tableLayoutPanel16.ResumeLayout(false);
-            this.tableLayoutPanel16.PerformLayout();
             this.tableLayoutPanel12.ResumeLayout(false);
             this.tableLayoutPanel12.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinute)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSecond)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMillisecond)).EndInit();
-            this.flowLayoutPanel3.ResumeLayout(false);
-            this.flowLayoutPanel3.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -475,19 +374,12 @@ namespace CustomTimers.View
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
-        private System.Windows.Forms.Label lblHour;
-        private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.Label lblMinute;
-        private System.Windows.Forms.Label label38;
-        private System.Windows.Forms.Label lblSecond;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.Label lblMillisecond;
         private System.Windows.Forms.NumericUpDown nudHour;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.NumericUpDown nudMinute;
         private System.Windows.Forms.NumericUpDown nudSecond;
         private System.Windows.Forms.NumericUpDown nudMillisecond;
         private System.Windows.Forms.CheckBox cbxAutoLoop;
+        private TimeDisplayUserControl ucTimeDisplay;
     }
 }
