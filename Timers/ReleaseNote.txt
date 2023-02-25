@@ -32,7 +32,7 @@ Summary:
         * State is saved to State.xml next to the executable.
 
 
---- Version 200 (XXXXXXX) by welshcoder ---
+--- Version 2.0 (25/02/2023) by welshcoder ---
 
 Summary:
 
