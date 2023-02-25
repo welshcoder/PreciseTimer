@@ -45,4 +45,5 @@ Summary:
 4. Added the ability to make the countdown timer auto restart when it
    reaches zero. Check the AutoLoop option to enable this.
 5. Cleaned up the UI.
+6. Added a new time display as a user control with different display formats.
 6. Simplified the sound playing model.

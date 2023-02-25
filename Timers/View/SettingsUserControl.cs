@@ -134,9 +134,16 @@ namespace CustomTimers.View
                     new KeyedElement("IntervalUnit", cbxIntervalUnit.SelectedValue.ToString()),
                     new KeyedElement("Interval", nudInterval.Value.ToString()),
                     new KeyedElement("HighResolution", cbxHighResolution.Checked.ToString()),
-                    new KeyedElement("Message", txtMessage.Text),
-                    new KeyedElement("Sound", txtSound.Text),
-                    new KeyedElement("SoundEnabled", cbxSoundEnabled.Checked.ToString())
+
+                    new KeyedElement("EndingMessage", txtMessage.Text),
+                    new KeyedElement("EndingMessageEnabled", cbxCountdownMessageEnabled.Checked.ToString()),
+
+                    new KeyedElement("EndingSoundPath", txtSound.Text),
+                    new KeyedElement("EndingSoundEnabled", cbxSoundEnabled.Checked.ToString()),
+
+                    new KeyedElement("CountdownSoundPath", txtCountdownSound.Text),
+                    new KeyedElement("CountdownSoundEnabled", cbxCountdownSound.Checked.ToString()),
+                    new KeyedElement("CountdownLastSeconds", nudLastSeconds.Value.ToString())
                 };
 
             return memento.ToList();
@@ -153,12 +160,17 @@ namespace CustomTimers.View
 
                     cbxIntervalUnit.SelectedItem = memento["IntervalUnit"];
                     nudInterval.Value = Convert.ToUInt32(memento["Interval"]);
+                    cbxHighResolution.Checked = Convert.ToBoolean(memento["HighResolution"]);
 
-                    cbxHighResolution.Checked = Convert.ToBoolean(memento["HighResolution"]);
-                    cbxHighResolution.Checked = Convert.ToBoolean(memento["HighResolution"]);
-                    txtMessage.Text = memento["Message"];
-                    txtSound.Text = memento["Sound"];
-                    cbxSoundEnabled.Checked = Convert.ToBoolean(memento["SoundEnabled"]);
+                    txtMessage.Text = memento["EndingMessage"];
+                    cbxCountdownMessageEnabled.Checked = Convert.ToBoolean(memento["EndingMessageEnabled"]);
+
+                    txtSound.Text = memento["EndingSoundPath"];
+                    cbxSoundEnabled.Checked = Convert.ToBoolean(memento["EndingSoundEnabled"]);
+
+                    txtCountdownSound.Text = memento["CountdownSoundPath"];
+                    cbxCountdownSound.Checked = Convert.ToBoolean(memento["CountdownSoundEnabled"]);
+                    nudLastSeconds.Value = Convert.ToUInt32(memento["CountdownLastSeconds"]);
 
                     ReportStatus("Saved state has been restored successfully.");
                 }

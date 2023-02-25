@@ -49,6 +49,7 @@ namespace CustomTimers.View
             this.btnReset = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.ucTimeDisplay = new CustomTimers.View.TimeDisplayUserControl();
+            this.pbrCountdown = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanel16.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHour)).BeginInit();
@@ -63,14 +64,16 @@ namespace CustomTimers.View
             this.tableLayoutPanel16.ColumnCount = 1;
             this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel16.Controls.Add(this.tableLayoutPanel12, 0, 0);
-            this.tableLayoutPanel16.Controls.Add(this.panel3, 0, 2);
             this.tableLayoutPanel16.Controls.Add(this.ucTimeDisplay, 0, 1);
+            this.tableLayoutPanel16.Controls.Add(this.panel3, 0, 3);
+            this.tableLayoutPanel16.Controls.Add(this.pbrCountdown, 0, 2);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel16.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
-            this.tableLayoutPanel16.RowCount = 3;
+            this.tableLayoutPanel16.RowCount = 4;
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -270,6 +273,7 @@ namespace CustomTimers.View
             this.cbxAutoLoop.Name = "cbxAutoLoop";
             this.cbxAutoLoop.Size = new System.Drawing.Size(75, 17);
             this.cbxAutoLoop.TabIndex = 9;
+            this.cbxAutoLoop.Tag = "";
             this.cbxAutoLoop.Text = "Auto Loop";
             this.cbxAutoLoop.UseVisualStyleBackColor = true;
             this.cbxAutoLoop.CheckedChanged += new System.EventHandler(this.cbxAutoLoop_CheckedChanged);
@@ -281,7 +285,7 @@ namespace CustomTimers.View
             this.panel3.Controls.Add(this.btnStart);
             this.panel3.Controls.Add(this.btnReset);
             this.panel3.Controls.Add(this.btnStop);
-            this.panel3.Location = new System.Drawing.Point(61, 253);
+            this.panel3.Location = new System.Drawing.Point(61, 288);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(473, 61);
             this.panel3.TabIndex = 6;
@@ -335,8 +339,21 @@ namespace CustomTimers.View
             this.ucTimeDisplay.Minutes = ((uint)(0u));
             this.ucTimeDisplay.Name = "ucTimeDisplay";
             this.ucTimeDisplay.Seconds = ((uint)(0u));
-            this.ucTimeDisplay.Size = new System.Drawing.Size(590, 54);
+            this.ucTimeDisplay.Size = new System.Drawing.Size(590, 104);
             this.ucTimeDisplay.TabIndex = 7;
+            // 
+            // pbrCountdown
+            // 
+            this.pbrCountdown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbrCountdown.Location = new System.Drawing.Point(3, 173);
+            this.pbrCountdown.MarqueeAnimationSpeed = 0;
+            this.pbrCountdown.Name = "pbrCountdown";
+            this.pbrCountdown.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.pbrCountdown.RightToLeftLayout = true;
+            this.pbrCountdown.Size = new System.Drawing.Size(590, 14);
+            this.pbrCountdown.Step = 1;
+            this.pbrCountdown.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pbrCountdown.TabIndex = 8;
             // 
             // CountdownUserControl
             // 
@@ -381,5 +398,6 @@ namespace CustomTimers.View
         private System.Windows.Forms.NumericUpDown nudMillisecond;
         private System.Windows.Forms.CheckBox cbxAutoLoop;
         private TimeDisplayUserControl ucTimeDisplay;
+        private System.Windows.Forms.ProgressBar pbrCountdown;
     }
 }

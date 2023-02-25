@@ -49,15 +49,15 @@ namespace CustomTimers.View
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.ucTimeDisplay, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 104F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -66,14 +66,14 @@ namespace CustomTimers.View
             // 
             // panel3
             // 
+            this.panel3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.panel3.Controls.Add(this.btnPause);
             this.panel3.Controls.Add(this.btnStart);
             this.panel3.Controls.Add(this.btnReset);
             this.panel3.Controls.Add(this.btnStop);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(3, 68);
+            this.panel3.Location = new System.Drawing.Point(3, 107);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(473, 125);
+            this.panel3.Size = new System.Drawing.Size(473, 86);
             this.panel3.TabIndex = 7;
             // 
             // btnPause
@@ -159,6 +159,7 @@ namespace CustomTimers.View
             this.nudDivisor.Name = "nudDivisor";
             this.nudDivisor.Size = new System.Drawing.Size(60, 26);
             this.nudDivisor.TabIndex = 1;
+            this.nudDivisor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.nudDivisor.Value = new decimal(new int[] {
             1,
             0,
@@ -179,9 +180,13 @@ namespace CustomTimers.View
             // ucTimeDisplay
             // 
             this.ucTimeDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucTimeDisplay.Hours = ((uint)(0u));
             this.ucTimeDisplay.Location = new System.Drawing.Point(3, 3);
+            this.ucTimeDisplay.Milliseconds = ((uint)(0u));
+            this.ucTimeDisplay.Minutes = ((uint)(0u));
             this.ucTimeDisplay.Name = "ucTimeDisplay";
-            this.ucTimeDisplay.Size = new System.Drawing.Size(473, 59);
+            this.ucTimeDisplay.Seconds = ((uint)(0u));
+            this.ucTimeDisplay.Size = new System.Drawing.Size(473, 98);
             this.ucTimeDisplay.TabIndex = 9;
             // 
             // StopWatchUserControl

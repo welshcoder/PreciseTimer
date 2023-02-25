@@ -44,13 +44,13 @@ namespace CustomTimers
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabTimer = new System.Windows.Forms.TabControl();
             this.tabpCountdown = new System.Windows.Forms.TabPage();
+            this.ucCountdown = new CustomTimers.View.CountdownUserControl();
             this.tabpStopWatch = new System.Windows.Forms.TabPage();
             this.ucStopWatch = new CustomTimers.View.StopWatchUserControl();
             this.tabpSettings = new System.Windows.Forms.TabPage();
             this.ucSettings = new CustomTimers.View.SettingsUserControl();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ucCountdown = new CustomTimers.View.CountdownUserControl();
             this.menuStrip1.SuspendLayout();
             this.tabTimer.SuspendLayout();
             this.tabpCountdown.SuspendLayout();
@@ -62,7 +62,7 @@ namespace CustomTimers
             // nicoMain
             // 
             this.nicoMain.Icon = ((System.Drawing.Icon)(resources.GetObject("nicoMain.Icon")));
-            this.nicoMain.Text = "notifyIcon1";
+            this.nicoMain.Text = "PreciseTimer";
             this.nicoMain.Visible = true;
             this.nicoMain.DoubleClick += new System.EventHandler(this.NicoMainDoubleClick);
             // 
@@ -161,67 +161,6 @@ namespace CustomTimers
             this.tabpCountdown.Text = "Countdown";
             this.tabpCountdown.UseVisualStyleBackColor = true;
             // 
-            // tabpStopWatch
-            // 
-            this.tabpStopWatch.Controls.Add(this.ucStopWatch);
-            this.tabpStopWatch.Location = new System.Drawing.Point(4, 22);
-            this.tabpStopWatch.Margin = new System.Windows.Forms.Padding(0);
-            this.tabpStopWatch.Name = "tabpStopWatch";
-            this.tabpStopWatch.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.tabpStopWatch.Size = new System.Drawing.Size(568, 252);
-            this.tabpStopWatch.TabIndex = 1;
-            this.tabpStopWatch.Text = "Stop Watch";
-            this.tabpStopWatch.UseVisualStyleBackColor = true;
-            // 
-            // ucStopWatch
-            // 
-            this.ucStopWatch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucStopWatch.HighResolutionTimer = false;
-            this.ucStopWatch.Interval = 0;
-            this.ucStopWatch.IntervalUnit = null;
-            this.ucStopWatch.Location = new System.Drawing.Point(0, 10);
-            this.ucStopWatch.Margin = new System.Windows.Forms.Padding(0);
-            this.ucStopWatch.Name = "ucStopWatch";
-            this.ucStopWatch.Size = new System.Drawing.Size(568, 242);
-            this.ucStopWatch.StatusReporter = null;
-            this.ucStopWatch.TabIndex = 0;
-            // 
-            // tabpSettings
-            // 
-            this.tabpSettings.Controls.Add(this.ucSettings);
-            this.tabpSettings.Location = new System.Drawing.Point(4, 22);
-            this.tabpSettings.Name = "tabpSettings";
-            this.tabpSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabpSettings.Size = new System.Drawing.Size(568, 252);
-            this.tabpSettings.TabIndex = 2;
-            this.tabpSettings.Text = "Settings";
-            this.tabpSettings.UseVisualStyleBackColor = true;
-            // 
-            // ucSettings
-            // 
-            this.ucSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucSettings.Location = new System.Drawing.Point(3, 3);
-            this.ucSettings.Name = "ucSettings";
-            this.ucSettings.Size = new System.Drawing.Size(562, 246);
-            this.ucSettings.StatusReporter = null;
-            this.ucSettings.TabIndex = 0;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 303);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(576, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.ForeColor = System.Drawing.Color.Red;
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 17);
-            // 
             // ucCountdown
             // 
             this.ucCountdown.AutoLoop = false;
@@ -240,6 +179,68 @@ namespace CustomTimers
             this.ucCountdown.Size = new System.Drawing.Size(568, 243);
             this.ucCountdown.StatusReporter = null;
             this.ucCountdown.TabIndex = 0;
+            // 
+            // tabpStopWatch
+            // 
+            this.tabpStopWatch.Controls.Add(this.ucStopWatch);
+            this.tabpStopWatch.Location = new System.Drawing.Point(4, 22);
+            this.tabpStopWatch.Margin = new System.Windows.Forms.Padding(0);
+            this.tabpStopWatch.Name = "tabpStopWatch";
+            this.tabpStopWatch.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.tabpStopWatch.Size = new System.Drawing.Size(568, 253);
+            this.tabpStopWatch.TabIndex = 1;
+            this.tabpStopWatch.Text = "Stop Watch";
+            this.tabpStopWatch.UseVisualStyleBackColor = true;
+            // 
+            // ucStopWatch
+            // 
+            this.ucStopWatch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucStopWatch.HighResolutionTimer = false;
+            this.ucStopWatch.Interval = 0;
+            this.ucStopWatch.IntervalUnit = null;
+            this.ucStopWatch.Location = new System.Drawing.Point(0, 10);
+            this.ucStopWatch.Margin = new System.Windows.Forms.Padding(0);
+            this.ucStopWatch.Name = "ucStopWatch";
+            this.ucStopWatch.Size = new System.Drawing.Size(568, 243);
+            this.ucStopWatch.StatusReporter = null;
+            this.ucStopWatch.TabIndex = 0;
+            // 
+            // tabpSettings
+            // 
+            this.tabpSettings.Controls.Add(this.ucSettings);
+            this.tabpSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabpSettings.Name = "tabpSettings";
+            this.tabpSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabpSettings.Size = new System.Drawing.Size(568, 253);
+            this.tabpSettings.TabIndex = 2;
+            this.tabpSettings.Text = "Settings";
+            this.tabpSettings.UseVisualStyleBackColor = true;
+            // 
+            // ucSettings
+            // 
+            this.ucSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucSettings.Location = new System.Drawing.Point(3, 3);
+            this.ucSettings.Name = "ucSettings";
+            this.ucSettings.Size = new System.Drawing.Size(562, 247);
+            this.ucSettings.StatusReporter = null;
+            this.ucSettings.TabIndex = 0;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 303);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(576, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 1;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.ForeColor = System.Drawing.Color.Red;
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 17);
             // 
             // TimerForm
             // 

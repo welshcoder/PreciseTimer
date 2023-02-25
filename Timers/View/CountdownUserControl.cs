@@ -88,6 +88,7 @@ namespace CustomTimers.View
             nudMillisecond.Value = _countdownTimer.Millisecond;
         }
 
+
         private void UpdateButtons ()
         {
             btnStart.Enabled = true;
@@ -180,7 +181,7 @@ namespace CustomTimers.View
                     nudMinute.Value = Convert.ToUInt32(memento["Minute"]);
                     nudSecond.Value = Convert.ToUInt32(memento["Second"]);
                     nudMillisecond.Value = Convert.ToUInt32(memento["Millisecond"]);
-                    AutoLoop = Convert.ToBoolean(memento["AutoLoop"]);
+                    cbxAutoLoop.Checked = AutoLoop = Convert.ToBoolean(memento["AutoLoop"]);
 
                     ReportStatus("Saved state has been restored successfully.");
                 }
@@ -207,7 +208,7 @@ namespace CustomTimers.View
         public event EventHandler TimerStarted;
         protected virtual void OnTimerStarted (EventArgs e)
         {
-            CountdownSoundLastSec = CountdownLastSeconds;
+            CountdownSoundLastSec = Math.Min(CountdownLastSeconds, _countdownTimer.Second + _countdownTimer.Minute * 60 + _countdownTimer.Hour * 3600);
             TimerStarted(this, e);
         }
 
@@ -219,9 +220,10 @@ namespace CustomTimers.View
         {
             UpdateLabels();
 
+            int sec = _countdownTimer.Second + _countdownTimer.Minute * 60 + _countdownTimer.Hour * 3600;
+
             if (CountdownSoundEnable)
             {
-                int sec = _countdownTimer.Second + _countdownTimer.Minute * 60 + _countdownTimer.Hour * 3600;
                 if (sec < CountdownSoundLastSec)
                 {
                     PlaySound(CountdownSoundPath);
@@ -229,6 +231,8 @@ namespace CustomTimers.View
                 }
             }
 
+            sec *= 10;
+            pbrCountdown.Value = sec+ _countdownTimer.Millisecond / 100;
         }
 
         private void CustomTimerCompleted (object sender, EventArgs e)
@@ -261,8 +265,7 @@ namespace CustomTimers.View
                     _countdownTimer.Hour = Convert.ToInt32(nudHour.Value);
                     _countdownTimer.Minute = Convert.ToInt32(nudMinute.Value);
                     _countdownTimer.Second = Convert.ToInt32(nudSecond.Value);
-                    _countdownTimer.Millisecond =
-                        Convert.ToInt32(nudMillisecond.Value);
+                    _countdownTimer.Millisecond = Convert.ToInt32(nudMillisecond.Value);
                     _countdownTimer.Interval = Interval;
                     _countdownTimer.IntervalUnit =
                         (CustomTimer.IntervalUnits)Enum.Parse(
@@ -276,6 +279,9 @@ namespace CustomTimers.View
                     UpdateStatus();
                     UpdateLabels();
                 }
+
+                pbrCountdown.Minimum = 0;
+                pbrCountdown.Maximum = _countdownTimer.Hour * 36000 + _countdownTimer.Minute * 600 + _countdownTimer.Second * 10 + _countdownTimer.Millisecond/100;
 
                 _isStopClicked = false;
                 _countdownTimer.Start();
